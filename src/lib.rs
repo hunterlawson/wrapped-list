@@ -86,12 +86,8 @@ macro_rules! wrapped_list {
     ($wrapper:path ; $e1:expr, $e2:expr $(,)?) => {
         [$wrapper($e1), $wrapper($e2)]
     };
-    ($wrapper:path ; $e1:expr, $e2:expr, $($es:expr),*) => {
+    ($wrapper:path ; $e1:expr, $e2:expr, $($es:expr),* $(,)?) => {
         $crate::__wrapped_list_impl!($wrapper ; [$wrapper($e1)] ; $e2 ; $($es),*)
-    };
-    // Allow trailing commas
-    ($wrapper:path ; $e1:expr, $e2:expr, $($es:expr,)*) => {
-        $crate::wrapped_list!($wrapper ; $e1 , $e2 , $($es),*)
     };
     /* --------------------------------- Macros --------------------------------- */
     ($wrapper:ident! ; $e:expr $(,)?) => {
@@ -100,12 +96,8 @@ macro_rules! wrapped_list {
     ($wrapper:ident! ; $e1:expr, $e2:expr $(,)?) => {
         [$wrapper!($e1), $wrapper!($e2)]
     };
-    ($wrapper:ident! ; $e1:expr, $e2:expr, $($es:expr),*) => {
+    ($wrapper:ident! ; $e1:expr, $e2:expr, $($es:expr),* $(,)?) => {
         $crate::__wrapped_list_impl!($wrapper! ; [$wrapper!($e1)] ; $e2 ; $($es),*)
-    };
-    // Allow trailing commas
-    ($wrapper:ident! ; $e1:expr, $e2:expr, $($es:expr,)*) => {
-        $crate::wrapped_list!($wrapper! ; $e1 , $e2 , $($es),*)
     };
 }
 
