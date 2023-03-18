@@ -10,7 +10,7 @@ This crate provides the `wrapped_list!` macro which allows you to create a list 
 wrapped_list!(Box::new; value_1, value_2, ...)
 ```
 
-Evaluates to:
+Expands to:
 
 ```rust
 [Box::new(value_1), Box::new(value_2), ...]

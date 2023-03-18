@@ -7,7 +7,7 @@
 //! wrapped_list!(Box::new; value_1, value_2, ...)
 //! ```
 //!
-//! Evaluates to:
+//! Expands to:
 //!
 //! ```ignore
 //! [Box::new(value_1), Box::new(value_2), ...]
