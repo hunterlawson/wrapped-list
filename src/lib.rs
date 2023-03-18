@@ -1,6 +1,6 @@
 //! # wrapped-list
 //!
-//! This crate provides the `wrapped_list!` macro which allows you to create a list of elements
+//! This crate provides macros which allow you to create a list of elements
 //! that are wrappped by an object, function, or another macro at compile time.
 //!
 //! ```ignore
@@ -72,56 +72,37 @@
 
 /// Macro to wrap a list of values with a function, object, or another macro.
 ///
-///
-///
-/// See the [examples] to learn more.
-///
-/// [examples]: crate#examples
+/// See the [examples](crate#examples) to learn more.
 #[macro_export]
 macro_rules! wrapped_list {
-    /* ---------------------------------- Paths --------------------------------- */
-    ($wrapper:path ; $e:expr $(,)?) => {
-        [$wrapper($e)]
+    ($wrapper:path ; $($e:expr),* $(,)?) => {
+        [$($wrapper($e)),*]
     };
-    ($wrapper:path ; $e1:expr, $e2:expr $(,)?) => {
-        [$wrapper($e1), $wrapper($e2)]
-    };
-    ($wrapper:path ; $e1:expr, $e2:expr, $($es:expr),* $(,)?) => {
-        $crate::__wrapped_list_impl!($wrapper ; [$wrapper($e1)] ; $e2 ; $($es),*)
-    };
-    /* --------------------------------- Macros --------------------------------- */
-    ($wrapper:ident! ; $e:expr $(,)?) => {
-        [$wrapper!($e)]
-    };
-    ($wrapper:ident! ; $e1:expr, $e2:expr $(,)?) => {
-        [$wrapper!($e1), $wrapper!($e2)]
-    };
-    ($wrapper:ident! ; $e1:expr, $e2:expr, $($es:expr),* $(,)?) => {
-        $crate::__wrapped_list_impl!($wrapper! ; [$wrapper!($e1)] ; $e2 ; $($es),*)
-    };
+    ($wrapper:ident! ; $($e:expr),* $(,)?) => {
+        [$($wrapper!($e)),*]
+    }
 }
 
-/// Internal implementation macro used by [wrapped_list].
-/// This is not intended to be called on its own.
+/// Functions identically to [wrapped_list], but the list is returned as a vector.
 #[macro_export]
-macro_rules! __wrapped_list_impl {
-    ($out:tt) => {
-        $out
+macro_rules! wrapped_vec {
+    ($wrapper:path ; $($e:expr),* $(,)?) => {
+        vec![$($wrapper($e)),*]
     };
-    /* ---------------------------------- Paths --------------------------------- */
-    ($wrapper:path ; [$($out:tt)*] ; $e1:expr ; $e2:expr, $($es:expr),*) => {
-        $crate::__wrapped_list_impl!($wrapper ; [$($out)* , $wrapper($e1)] ; $e2 ; $($es),*)
+    ($wrapper:ident! ; $($e:expr),* $(,)?) => {
+        vec![$($wrapper!($e)),*]
+    }
+}
+
+/// Functions identically to [wrapped_list], but the list is returned as a tuple.
+#[macro_export]
+macro_rules! wrapped_tuple {
+    ($wrapper:path ; $($e:expr),* $(,)?) => {
+        ($($wrapper($e)),*)
     };
-    ($wrapper:path ; [$($out:tt)*] ; $e1:expr ; $e2:expr) => {
-        $crate::__wrapped_list_impl!([$($out)* , $wrapper($e1), $wrapper($e2)])
-    };
-    /* --------------------------------- Macros --------------------------------- */
-    ($wrapper:ident! ; [$($out:tt)*] ; $e1:expr ; $e2:expr, $($es:expr),*) => {
-        $crate::__wrapped_list_impl!($wrapper! ; [$($out)* , $wrapper!($e1)] ; $e2 ; $($es),*)
-    };
-    ($wrapper:ident! ; [$($out:tt)*] ; $e1:expr ; $e2:expr) => {
-        $crate::__wrapped_list_impl!([$($out)* , $wrapper!($e1), $wrapper!($e2)])
-    };
+    ($wrapper:ident! ; $($e:expr),* $(,)?) => {
+        ($($wrapper!($e)),*)
+    }
 }
 
 #[cfg(test)]
@@ -186,6 +167,46 @@ mod tests {
         assert_eq!(my_list, wrapped_list!(wrapper; 1, 2, 3));
         let my_list = [wrapper(1), wrapper(2), wrapper(3), wrapper(4)];
         assert_eq!(my_list, wrapped_list!(wrapper; 1, 2, 3, 4));
+    }
+
+    #[duplicate_item(
+        wrapper                test_name;
+        [Wrapper]              [vec_wrapper_test];
+        [ComplexWrapper::new]  [vec_complex_wrapper_test];
+        [Box::new]             [vec_box_test];
+        [wrapper_function1]    [vec_function_test1];
+        [wrapper_function2]    [vec_function_test2];
+    )]
+    #[test]
+    fn test_name() {
+        let my_list = vec![wrapper(1)];
+        assert_eq!(my_list, wrapped_vec!(wrapper; 1));
+        let my_list = vec![wrapper(1), wrapper(2)];
+        assert_eq!(my_list, wrapped_vec!(wrapper; 1, 2));
+        let my_list = vec![wrapper(1), wrapper(2), wrapper(3)];
+        assert_eq!(my_list, wrapped_vec!(wrapper; 1, 2, 3));
+        let my_list = vec![wrapper(1), wrapper(2), wrapper(3), wrapper(4)];
+        assert_eq!(my_list, wrapped_vec!(wrapper; 1, 2, 3, 4));
+    }
+
+    #[duplicate_item(
+        wrapper                test_name;
+        [Wrapper]              [tuple_wrapper_test];
+        [ComplexWrapper::new]  [tuple_complex_wrapper_test];
+        [Box::new]             [tuple_box_test];
+        [wrapper_function1]    [tuple_function_test1];
+        [wrapper_function2]    [tuple_function_test2];
+    )]
+    #[test]
+    fn test_name() {
+        let my_list = (wrapper(1));
+        assert_eq!(my_list, wrapped_tuple!(wrapper; 1));
+        let my_list = (wrapper(1), wrapper(2));
+        assert_eq!(my_list, wrapped_tuple!(wrapper; 1, 2));
+        let my_list = (wrapper(1), wrapper(2), wrapper(3));
+        assert_eq!(my_list, wrapped_tuple!(wrapper; 1, 2, 3));
+        let my_list = (wrapper(1), wrapper(2), wrapper(3), wrapper(4));
+        assert_eq!(my_list, wrapped_tuple!(wrapper; 1, 2, 3, 4));
     }
 
     #[test]
