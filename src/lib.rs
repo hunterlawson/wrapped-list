@@ -4,7 +4,7 @@
 //! that are wrappped by an object, function, or another macro at compile time.
 //!
 //! ```ignore
-//! wrapped_list!(Box::new, value_1, value_2, ...)
+//! wrapped_list!(Box::new; value_1, value_2, ...)
 //! ```
 //!
 //! Evaluates to:

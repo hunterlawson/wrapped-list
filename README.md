@@ -7,7 +7,7 @@
 This crate provides the `wrapped_list!` macro which allows you to create a list of elements that are wrapped by an object, function, or another macro at compile time.
 
 ```rust
-wrapped_list!(Box::new, value_1, value_2, ...)
+wrapped_list!(Box::new; value_1, value_2, ...)
 ```
 
 Evaluates to:

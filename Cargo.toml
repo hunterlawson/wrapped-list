@@ -1,6 +1,6 @@
 [package]
 name = "wrapped-list"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 description = "Macro for wrapping elements of a list with an object, function, or another macro at compile time"
 readme = "README.md"
