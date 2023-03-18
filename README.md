@@ -4,10 +4,12 @@
 [![Crate](https://img.shields.io/crates/v/wrapped-list)](https://crates.io/crates/wrapped-list)
 [![License](https://img.shields.io/crates/l/wrapped-list)](https://github.com/hunterlawson/wrapped-list/blob/master/LICENSE)
 
-This crate provides the `wrapped_list!` macro which allows you to create a list of elements that are wrapped by an object, function, or another macro at compile time.
+This crate provides macros which allow you to create lists of elements
+that are wrappped by an object, function, or another macro at compile time.
+Check out the [documentation](https://docs.rs/wrapped-list/1.0.0/wrapped_list/).
 
 ```rust
-wrapped_list!(Box::new; value_1, value_2, ...)
+wrapped_list![Box::new; value_1, value_2, ...]
 ```
 
 Expands to:
@@ -32,7 +34,7 @@ use wrapped_list::wrapped_list;
 #[derive(Debug, PartialEq, Eq)]
 struct Wrapper(i32);
 
-let wrapped_items = wrapped_list!(Wrapper; 1, 2, 3, 4);
+let wrapped_items = wrapped_list![Wrapper; 1, 2, 3, 4];
 
 assert_eq!(wrapped_items, [Wrapper(1), Wrapper(2), Wrapper(3), Wrapper(4)]);
 ```
@@ -42,7 +44,7 @@ assert_eq!(wrapped_items, [Wrapper(1), Wrapper(2), Wrapper(3), Wrapper(4)]);
 ```rust
 use wrapped_list::wrapped_list;
 
-let boxed_items = wrapped_list!(Box::new; 1, 2, 3);
+let boxed_items = wrapped_list![Box::new; 1, 2, 3];
 
 assert_eq!(boxed_items, [Box::new(1), Box::new(2), Box::new(3)])
 ```
@@ -52,7 +54,7 @@ use wrapped_list::wrapped_list;
 
 let func = |x| x * 2;
 
-let doubled = wrapped_list!(func; 1, 2, 3);
+let doubled = wrapped_list![func; 1, 2, 3];
 
 assert_eq!(doubled, [2, 4, 6]);
 ```
@@ -68,7 +70,7 @@ macro_rules! add_one {
     };
 }
 
-let one_more = wrapped_list!(add_one!; 1, 2, 3);
+let one_more = wrapped_list![add_one!; 1, 2, 3];
 
 assert_eq!(one_more, [2, 3, 4]);
 ```
