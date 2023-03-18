@@ -1,6 +1,6 @@
 //! # wrapped-list
 //!
-//! This crate provides the `wrapped_list!` macro which allows you to create a list of elements 
+//! This crate provides the `wrapped_list!` macro which allows you to create a list of elements
 //! that are wrappped by an object, function, or another macro at compile time.
 //!
 //! ```ignore
@@ -71,11 +71,11 @@
 //! ```
 
 /// Macro to wrap a list of values with a function, object, or another macro.
-/// 
-/// 
-/// 
+///
+///
+///
 /// See the [examples] to learn more.
-/// 
+///
 /// [examples]: crate#examples
 #[macro_export]
 macro_rules! wrapped_list {
@@ -113,10 +113,10 @@ macro_rules! wrapped_list {
 /// This is not intended to be called on its own.
 #[macro_export]
 macro_rules! __wrapped_list_impl {
-    /* ---------------------------------- Paths --------------------------------- */
     ($out:tt) => {
         $out
     };
+    /* ---------------------------------- Paths --------------------------------- */
     ($wrapper:path ; [$($out:tt)*] ; $e1:expr ; $e2:expr, $($es:expr),*) => {
         $crate::__wrapped_list_impl!($wrapper ; [$($out)* , $wrapper($e1)] ; $e2 ; $($es),*)
     };
