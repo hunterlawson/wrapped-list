@@ -1,5 +1,9 @@
 # wrapped-list
 
+[![Build](https://github.com/hunterlawson/wrapped-list/actions/workflows/tests.yml/badge.svg)](https://github.com/hunterlawson/wrapped-list/blob/master/.github/workflows/tests.yml)
+[![Crate](https://img.shields.io/crates/v/wrapped-list)](https://crates.io/crates/wrapped-list)
+[![License](https://img.shields.io/crates/l/wrapped-list)](https://github.com/hunterlawson/wrapped-list/blob/master/LICENSE)
+
 This crate provides the `wrapped_list!` macro which allows you to create a list of elements that are wrapped by an object, function, or another macro at compile time.
 
 ```rust
